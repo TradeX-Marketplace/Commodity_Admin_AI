@@ -1,0 +1,121 @@
+{
+  "testSuite": "ChatbotVerificationQueries",
+  "generatedAt": "2026-10-21T10:43:00+05:30",
+  "environment": {
+    "tradexPort": 8080,
+    "commodityAdminAiPort": 9090,
+    "pgvectorPort": 5433
+  },
+  "queries": [
+    {
+      "id": 1,
+      "question": "Show synthetic test orders from October 10 to October 20, 2026.",
+      "intent": "ORDERS",
+      "httpStatus": 200,
+      "expectedOrdersCount": 6,
+      "matchedOrderIds": [103, 104, 105, 106, 107, 108, 109],
+      "summary": "Found 6 matching orders within the October 10 to October 20, 2026 window.",
+      "status": "PASS"
+    },
+    {
+      "id": 2,
+      "question": "Show soybean orders on October 15, 2026.",
+      "intent": "ORDERS",
+      "httpStatus": 200,
+      "expectedOrdersCount": 0,
+      "matchedOrderIds": [],
+      "summary": "No matching orders found for the specified criteria. (On 2026-10-15, only Cotton order #105 was placed).",
+      "status": "PASS"
+    },
+    {
+      "id": 3,
+      "question": "Show orders grouped by status.",
+      "intent": "ORDERS",
+      "httpStatus": 200,
+      "expectedBreakdown": {
+        "CONFIRMED": 4,
+        "COMPLETED": 4,
+        "PENDING": 1,
+        "CANCELLED": 1
+      },
+      "summary": "Returns 10 orders across statuses CONFIRMED, COMPLETED, PENDING, and CANCELLED.",
+      "status": "PASS"
+    },
+    {
+      "id": 4,
+      "question": "Calculate total order value and quantity.",
+      "intent": "ORDERS",
+      "httpStatus": 200,
+      "expectedTotalValue": "₹4350125.00 INR",
+      "expectedTotalQuantity": "1035.00 Quintal",
+      "summary": "Aggregated metrics across synthetic dataset calculated accurately.",
+      "status": "PASS"
+    },
+    {
+      "id": 5,
+      "question": "Show orders for each available commodity.",
+      "intent": "ORDERS",
+      "httpStatus": 200,
+      "commodityBreakdown": {
+        "Soybean": 5,
+        "Wheat": 2,
+        "Cotton": 2,
+        "Maize": 1
+      },
+      "summary": "Accurately maps orders for Soybean, Wheat, Cotton, and Maize.",
+      "status": "PASS"
+    },
+    {
+      "id": 6,
+      "question": "Show supplies, demands, and bids for this period.",
+      "intent": "TODAY_LISTINGS",
+      "httpStatus": 200,
+      "liveApiEndpoints": [
+        "GET http://localhost:8080/api/ai/supplies",
+        "GET http://localhost:8080/api/ai/demands",
+        "GET http://localhost:8080/api/ai/bids"
+      ],
+      "summary": "Retrieved live active Tradex records: 1 live Soybean supply (ID 1, 100 Qtl @ ₹4500/Qtl, Sangli) and 1 live Soybean bid (ID 1, 50 Qtl @ ₹4450/Qtl).",
+      "status": "PASS"
+    },
+    {
+      "id": 7,
+      "question": "Show soybean market rates for October 10–20, 2026.",
+      "intent": "RATE_TREND",
+      "httpStatus": 200,
+      "verifiedDatesWithRates": [
+        "2026-10-14 (₹4285.0/Qtl)",
+        "2026-10-15 (₹4250.0/Qtl)",
+        "2026-10-19/20 (₹4500.0/Qtl live asking rate)"
+      ],
+      "unrecordedDates": [
+        "2026-10-10",
+        "2026-10-11",
+        "2026-10-12",
+        "2026-10-13",
+        "2026-10-16",
+        "2026-10-17",
+        "2026-10-18"
+      ],
+      "summary": "Historical rates returned for verified database dates; unrecorded dates explicitly reported as having no recorded data without fabricating fake rates.",
+      "status": "PASS"
+    },
+    {
+      "id": 8,
+      "question": "Which dates have no verified historical-rate records?",
+      "intent": "RATE_TREND",
+      "httpStatus": 200,
+      "unrecordedDates": [
+        "2026-10-10",
+        "2026-10-11",
+        "2026-10-12",
+        "2026-10-13",
+        "2026-10-16",
+        "2026-10-17",
+        "2026-10-18"
+      ],
+      "summary": "AI explicitly identifies and states that October 10-13 and October 16-18 have no recorded historical market rates.",
+      "status": "PASS"
+    }
+  ]
+}

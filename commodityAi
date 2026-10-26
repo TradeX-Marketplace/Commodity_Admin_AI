@@ -1,0 +1,2208 @@
+# COMMODITY ADMIN AI — FINAL DEVELOPMENT PROMPT
+
+PROJECT NAME: Commodity_Admin_AI
+PROMPT FILE: commodityAi
+
+
+==================================================
+PROJECT OBJECTIVE
+==================================================
+
+Build an Admin-only AI chatbot for the B2B Commodity Raw Material Marketplace.
+
+The chatbot will allow an authorized Admin to ask questions about marketplace data and knowledge using natural language.
+
+The Admin can communicate using:
+
+1. English
+2. Marathi
+3. Hindi
+
+The Admin can enter questions using:
+
+1. Keyboard
+2. Microphone / Speech-to-Text
+
+The chatbot must use:
+
+- Spring Boot
+- Java 17
+- Spring AI
+- Google Gemini
+- Google Gemini Embedding
+- PostgreSQL
+- PGVector
+- RAG
+- Controlled Backend REST APIs
+- HTTP/JSON communication
+
+The chatbot is READ-ONLY in Phase 1.
+
+
+==================================================
+IMPORTANT PROJECT ARCHITECTURE
+==================================================
+
+There are TWO separate projects owned by TWO teams.
+
+PROJECT 1 — MARKETPLACE BACKEND
+Owned by the Backend Team.
+
+Responsibilities:
+
+- Marketplace business logic
+- Marketplace PostgreSQL database
+- Users
+- Organizations
+- Commodities
+- Market rates
+- Rate history
+- Listings
+- Buyer demands
+- Notifications
+- WhatsApp logs
+- Authentication/authorization
+- Controlled REST APIs
+
+PROJECT 2 — COMMODITY ADMIN AI
+Owned by the Chatbot/AI Team.
+
+Responsibilities:
+
+- Admin chatbot
+- ChatSession
+- ChatMessage
+- Gemini
+- Gemini Embedding
+- PGVector
+- RAG
+- Marketplace data ingestion
+- Marketplace data indexing
+- Admin chatbot API
+- Multilingual support
+- Speech-to-text integration
+- Chat history
+
+
+==================================================
+IMPORTANT DATA ARCHITECTURE
+==================================================
+
+The Marketplace Backend PostgreSQL database remains the SOURCE OF TRUTH for marketplace data.
+
+The Chatbot project must NOT directly connect to the Marketplace Backend PostgreSQL database.
+
+The Chatbot project must NOT use the Marketplace database credentials.
+
+The Chatbot project receives approved marketplace data through controlled Backend REST APIs.
+
+Communication between the two projects is:
+
+Backend REST API
+        ↓
+HTTP
+        ↓
+JSON
+        ↓
+Chatbot Data Ingestion
+        ↓
+Embedding
+        ↓
+Chatbot PGVector
+
+
+==================================================
+MARKETPLACE DATA FLOW
+==================================================
+
+The Backend Team owns the original marketplace data.
+
+Example:
+
+Marketplace PostgreSQL
+        ↓
+Backend Repository
+        ↓
+Backend Service
+        ↓
+Controlled REST API
+        ↓
+HTTP / JSON
+        ↓
+Chatbot Marketplace Data Ingestion
+        ↓
+Convert data into searchable document/text
+        ↓
+Gemini Embedding
+        ↓
+PGVector
+
+
+IMPORTANT:
+
+Do NOT assume or invent actual Backend API URLs.
+
+The Backend Team will provide the real API contract later.
+
+If the Backend API does not exist yet:
+
+- Do not create fake backend data.
+- Do not create fake API responses.
+- Do not hardcode marketplace values.
+- Document the required API contract.
+- Create only the chatbot-side integration abstraction when appropriate.
+
+
+==================================================
+PGVECTOR ARCHITECTURE
+==================================================
+
+Use ONE PGVector system in the Chatbot project.
+
+PGVector can contain two logical categories of searchable information.
+
+CATEGORY 1 — KNOWLEDGE / RAG DATA
+
+Examples:
+
+- Commodity information
+- Documents
+- FAQs
+- Business rules
+- Marketplace documentation
+- General commodity knowledge
+- Other approved knowledge documents
+
+
+CATEGORY 2 — INDEXED MARKETPLACE DATA
+
+Examples:
+
+- Current market rates
+- Rate history
+- Buyer demands
+- Listings
+- Commodities
+- Notifications
+- WhatsApp logs
+- Other approved marketplace information
+
+Use metadata to distinguish data types where appropriate.
+
+For example:
+
+type = KNOWLEDGE
+
+or
+
+type = MARKETPLACE_DATA
+
+
+IMPORTANT:
+
+PGVector is NOT the source of truth for marketplace transactions.
+
+Marketplace PostgreSQL remains the source of truth.
+
+PGVector contains a searchable/indexed representation of approved data for AI retrieval.
+
+
+==================================================
+FINAL CHATBOT QUERY FLOW
+==================================================
+
+ADMIN
+   │
+   ├──────── Keyboard
+   │
+   └──────── 🎙 Microphone
+                │
+                ↓
+          Speech → Text
+                │
+                ↓
+          Text Question
+                │
+                ↓
+       POST /api/admin/chat
+                │
+                ↓
+       AdminChatbotController
+                │
+                ↓
+       AdminChatbotService
+                │
+                ↓
+          IntentService
+                │
+                ↓
+            RagService
+                │
+                ↓
+             PGVector
+                │
+                ↓
+        Relevant Context
+                │
+                ↓
+             Gemini
+                │
+                ↓
+         Natural Language
+             Response
+                │
+                ↓
+          ChatMessage
+                │
+                ↓
+       Chatbot PostgreSQL
+
+
+IMPORTANT:
+
+For the current architecture, the chatbot retrieves marketplace data from the Chatbot project's PGVector index.
+
+The chatbot does NOT directly query the Marketplace PostgreSQL database.
+
+The chatbot does NOT give Gemini unrestricted database access.
+
+
+==================================================
+MARKETPLACE DATA INGESTION FLOW
+==================================================
+
+Backend Team Project
+
+Marketplace PostgreSQL
+        ↓
+Backend Services
+        ↓
+Controlled REST API
+        ↓
+HTTP / JSON
+        ↓
+Chatbot MarketplaceDataIngestion
+        ↓
+Document/Text preparation
+        ↓
+Gemini Embedding
+        ↓
+Chatbot PGVector
+        ↓
+RagService
+        ↓
+Gemini
+
+
+Example Backend JSON:
+
+{
+    "commodity": "Soybean",
+    "location": "Sangli",
+    "rate": 42000,
+    "unit": "MT",
+    "date": "2026-09-26"
+}
+
+
+The Chatbot project should:
+
+1. Receive JSON.
+2. Validate/process the data.
+3. Convert useful data into searchable text/document form.
+4. Generate embeddings.
+5. Store the embedding and appropriate metadata in PGVector.
+6. Later retrieve the relevant information through RAG.
+
+
+==================================================
+EXAMPLE QUERY
+==================================================
+
+Admin asks:
+
+"What is the soybean rate in Sangli?"
+
+
+Flow:
+
+Admin
+ ↓
+POST /api/admin/chat
+ ↓
+AdminChatbotController
+ ↓
+AdminChatbotService
+ ↓
+IntentService
+ ↓
+RagService
+ ↓
+PGVector similarity search
+ ↓
+Relevant soybean/Sangli data
+ ↓
+Controlled context
+ ↓
+Gemini
+ ↓
+Answer
+
+
+Example answer:
+
+"The current soybean rate in Sangli is ₹42,000 per MT."
+
+
+The number must come from indexed/approved marketplace data.
+
+Never invent marketplace values.
+
+
+==================================================
+RAG + MARKETPLACE DATA
+==================================================
+
+The chatbot must support:
+
+PATH 1 — KNOWLEDGE QUESTION
+
+Example:
+
+"What is corn gluten feed?"
+
+Flow:
+
+IntentService
+     ↓
+RagService
+     ↓
+PGVector
+     ↓
+Knowledge Retrieval
+     ↓
+Relevant Context
+     ↓
+Gemini
+     ↓
+Answer
+
+
+PATH 2 — MARKETPLACE DATA QUESTION
+
+Example:
+
+"What is the current soybean rate in Sangli?"
+
+Flow:
+
+IntentService
+     ↓
+RagService
+     ↓
+PGVector
+     ↓
+Marketplace Data Retrieval
+     ↓
+Relevant Context
+     ↓
+Gemini
+     ↓
+Answer
+
+
+PATH 3 — COMBINED QUESTION
+
+Example:
+
+"What is the current soybean rate in Sangli and explain soybean?"
+
+Flow:
+
+IntentService
+        ↓
+RagService
+        ↓
+PGVector
+        ↓
+Retrieve marketplace data
+        +
+Retrieve knowledge
+        ↓
+Combined Context
+        ↓
+Gemini
+        ↓
+Answer
+
+
+IMPORTANT:
+
+Use one PGVector system.
+
+Do not create two separate vector databases unless explicitly required later.
+
+Use metadata and retrieval logic to distinguish knowledge data and marketplace data.
+
+
+==================================================
+CHAT HISTORY STORAGE
+==================================================
+
+ChatSession and ChatMessage belong to the Chatbot project.
+
+They are stored in the Chatbot project's PostgreSQL database.
+
+They are NOT marketplace data tables.
+
+ChatSession:
+
+- session information
+
+ChatMessage:
+
+- Admin message
+- Assistant message
+- conversation history
+
+Example:
+
+ChatSession #1
+
+Message 1:
+ADMIN
+"Soybean current rate?"
+
+Message 2:
+ASSISTANT
+"Soybean current rate is ₹42,000 per MT."
+
+
+Do NOT store raw microphone audio in Phase 1.
+
+Store only the final speech-to-text result as ChatMessage.content.
+
+
+==================================================
+IMPORTANT SECURITY RULE
+==================================================
+
+Gemini must NEVER directly access:
+
+- Marketplace PostgreSQL
+- Chatbot PostgreSQL
+- Backend database credentials
+- Unrestricted backend APIs
+
+Gemini should receive only the relevant controlled context prepared by the Chatbot application.
+
+
+==================================================
+EXACTLY 21 DEVELOPMENT STEPS
+==================================================
+
+01. Project Inspection
+
+02. Simple Backend Package Structure
+
+03. ChatSession Entity
+
+04. ChatMessage Entity
+
+05. Chat DTOs
+
+06. AdminChatbotController
+
+07. AdminChatbotService
+
+08. IntentService
+
+09. Marketplace Data Integration Architecture
+
+10. RAG Service
+
+11. Gemini Integration
+
+12. RAG Advisor
+
+13. Marketplace Data + RAG Integration
+
+14. Chat History
+
+15. Admin Security
+
+16. Read-Only Phase 1
+
+17. Future Architecture
+
+18. Backend Testing
+
+19. Multilingual Support
+
+20. Microphone / Speech-to-Text
+
+21. Final Integration & End-to-End Testing
+
+
+==================================================
+STEP 01 — PROJECT INSPECTION
+==================================================
+
+Before creating or modifying anything, inspect the existing project.
+
+Check:
+
+- pom.xml
+- Java version
+- Spring Boot version
+- existing packages
+- existing entities
+- existing repositories
+- existing services
+- existing controllers
+- existing security
+- PostgreSQL configuration
+- Spring AI configuration
+- Gemini configuration
+- PGVector configuration
+- application.properties/application.yml
+- existing APIs
+- existing database structure
+
+Do NOT modify code during this step.
+
+Do NOT create new files during this step.
+
+Return an inspection report containing:
+
+1. Existing package structure
+2. Existing entities
+3. Existing repositories
+4. Existing services
+5. Existing controllers
+6. Existing security
+7. Existing PostgreSQL configuration
+8. Existing Spring AI configuration
+9. Existing Gemini configuration
+10. Existing PGVector configuration
+11. Existing APIs useful for Admin AI
+12. Missing chatbot components
+13. Duplicate components that must NOT be created
+14. Recommended implementation approach
+
+After the report:
+
+STOP.
+
+Do NOT start STEP 02 automatically.
+
+
+==================================================
+STEP 02 — SIMPLE BACKEND PACKAGE STRUCTURE
+==================================================
+
+Create or reuse a simple backend structure.
+
+Recommended:
+
+src/main/java/com/example/Commodity_Admin_AI/
+
+    controller/
+        AdminChatbotController.java
+
+    service/
+        AdminChatbotService.java
+        IntentService.java
+        MarketplaceDataService.java
+        MarketplaceDataSyncService.java
+
+    repository/
+        ChatSessionRepository.java
+        ChatMessageRepository.java
+
+    entity/
+        ChatSession.java
+        ChatMessage.java
+
+    dto/
+        ChatRequest.java
+        ChatResponse.java
+
+    ai/
+        RagService.java
+        GeminiService.java
+        EmbeddingService.java
+
+    config/
+        AIConfig.java
+        PGVectorConfig.java
+
+
+IMPORTANT:
+
+Before creating any class, check whether it already exists.
+
+Do not create duplicate classes.
+
+Do not unnecessarily change existing marketplace code.
+
+The chatbot project must remain independent from the Marketplace Backend project.
+
+After implementation:
+
+BUILD
+TEST
+REPORT
+STOP.
+
+
+==================================================
+STEP 03 — CHAT SESSION ENTITY
+==================================================
+
+Create or reuse:
+
+ChatSession.java
+
+ChatSession represents one Admin chatbot conversation/session.
+
+Possible fields:
+
+- id
+- adminUserId
+- createdAt
+- updatedAt
+
+Relationship:
+
+ChatSession
+     │
+     └── ChatMessage
+
+
+ChatSession must NOT contain:
+
+- market rate
+- listing
+- demand
+- commodity
+- notification
+- WhatsApp log
+
+Those are marketplace data.
+
+Create/reuse:
+
+ChatSessionRepository.java
+
+
+After implementation:
+
+BUILD
+TEST
+REPORT
+STOP.
+
+
+==================================================
+STEP 04 — CHAT MESSAGE ENTITY
+==================================================
+
+Create or reuse:
+
+ChatMessage.java
+
+ChatMessage stores individual messages.
+
+Possible fields:
+
+- id
+- session
+- role
+- content
+- createdAt
+
+Roles:
+
+ADMIN
+ASSISTANT
+
+Example:
+
+ADMIN:
+"XYZ current rate?"
+
+ASSISTANT:
+"XYZ current rate is ₹XXXX per MT."
+
+
+ChatMessage stores conversation history.
+
+It must NOT become a replacement for marketplace tables.
+
+Create/reuse:
+
+ChatMessageRepository.java
+
+
+After implementation:
+
+BUILD
+TEST
+REPORT
+STOP.
+
+
+==================================================
+STEP 05 — CHAT DTOs
+==================================================
+
+Create/reuse:
+
+ChatRequest.java
+
+ChatResponse.java
+
+
+Example request:
+
+{
+    "sessionId": 1,
+    "message": "XYZ current rate?"
+}
+
+
+Example response:
+
+{
+    "sessionId": 1,
+    "message": "The current XYZ rate is ₹XXXX per MT."
+}
+
+
+Keep DTOs simple.
+
+Do not put database entities directly in API request/response unless required by the existing project architecture.
+
+
+After implementation:
+
+BUILD
+TEST
+REPORT
+STOP.
+
+
+==================================================
+STEP 06 — ADMIN CHATBOT CONTROLLER
+==================================================
+
+Create/reuse:
+
+AdminChatbotController.java
+
+
+Endpoint:
+
+POST /api/admin/chat
+
+
+Responsibilities:
+
+- receive ChatRequest
+- validate request
+- call AdminChatbotService
+- return ChatResponse
+
+
+Controller must NOT contain:
+
+- AI logic
+- RAG logic
+- database query logic
+- business logic
+
+
+Architecture:
+
+Controller
+    ↓
+AdminChatbotService
+
+
+Do not implement marketplace Backend API integration in this step.
+
+Do not implement frontend in this step.
+
+After implementation:
+
+1. BUILD
+2. TEST
+3. REPORT
+4. STOP
+
+
+==================================================
+STEP 07 — ADMIN CHATBOT SERVICE
+==================================================
+
+Create/reuse:
+
+AdminChatbotService.java
+
+
+Responsibilities:
+
+1. Receive Admin question
+2. Create/find ChatSession
+3. Save Admin ChatMessage
+4. Send question to IntentService
+5. Determine required retrieval path
+6. Call RagService
+7. Build controlled context
+8. Send context to Gemini
+9. Receive AI response
+10. Save AI ChatMessage
+11. Return ChatResponse
+
+
+Do not put all logic into the controller.
+
+Do not allow Gemini direct database access.
+
+Do not create fake marketplace data.
+
+
+After implementation:
+
+BUILD
+TEST
+REPORT
+STOP.
+
+
+==================================================
+STEP 08 — INTENT SERVICE
+==================================================
+
+Create/reuse:
+
+IntentService.java
+
+
+The service identifies the purpose of the Admin's question.
+
+Initial intents:
+
+CURRENT_RATE
+TODAY_DEMAND
+RATE_TREND
+TODAY_LISTINGS
+COMMODITY_INFORMATION
+NOTIFICATION_STATUS
+WHATSAPP_STATUS
+UNKNOWN
+
+
+Examples:
+
+"XYZ current rate?"
+→ CURRENT_RATE
+
+
+"आज XYZ ची demand किती आहे?"
+→ TODAY_DEMAND
+
+
+"XYZ चा 7 दिवसांचा trend?"
+→ RATE_TREND
+
+
+"Tell me about XYZ commodity."
+→ COMMODITY_INFORMATION
+
+
+Keep the initial intent system simple and maintainable.
+
+
+IMPORTANT:
+
+IntentService should determine whether the question needs:
+
+- marketplace indexed data
+- knowledge retrieval
+- both
+- unknown
+
+
+After implementation:
+
+BUILD
+TEST
+REPORT
+STOP.
+
+
+==================================================
+STEP 09 — MARKETPLACE DATA INTEGRATION ARCHITECTURE
+==================================================
+
+The Marketplace Backend and Chatbot are separate projects.
+
+Do NOT directly connect the Chatbot project to the Marketplace PostgreSQL database.
+
+Do NOT use Marketplace database credentials inside the Chatbot project.
+
+The integration must use:
+
+Backend REST API
+      ↓
+HTTP / JSON
+      ↓
+Chatbot Data Ingestion
+      ↓
+Embedding
+      ↓
+PGVector
+
+
+The Chatbot project must contain the necessary abstraction for receiving approved marketplace data.
+
+Recommended components:
+
+MarketplaceDataService.java
+
+MarketplaceDataSyncService.java
+
+
+Responsibilities may include:
+
+- calling approved backend APIs
+- receiving JSON
+- validating data
+- converting marketplace data into searchable documents/text
+- sending data to the embedding process
+- storing indexed data in PGVector
+- updating/re-indexing changed data
+
+
+IMPORTANT:
+
+Do NOT invent actual backend API URLs.
+
+Do NOT invent fake marketplace data.
+
+Do NOT create fake backend responses.
+
+The Backend Team will provide the real API contract.
+
+If the real API does not yet exist:
+
+1. Document the required API contract.
+2. Create only the chatbot-side integration abstraction if appropriate.
+3. Do not create fake live data.
+4. Do not pretend the backend integration is complete.
+
+
+Example conceptual API:
+
+GET /api/chatbot/market-rates
+
+This is ONLY an example.
+
+The actual endpoint must come from the Backend Team.
+
+
+Example JSON:
+
+{
+    "commodity": "Soybean",
+    "location": "Sangli",
+    "rate": 42000,
+    "unit": "MT",
+    "date": "2026-09-26"
+}
+
+
+The Chatbot should process the JSON and prepare it for indexing.
+
+
+After implementation:
+
+BUILD
+TEST
+REPORT
+STOP.
+
+
+==================================================
+STEP 10 — RAG SERVICE
+==================================================
+
+Create/reuse:
+
+RagService.java
+
+
+Use Spring AI.
+
+Use:
+
+- VectorStore
+- PGVector
+- Gemini Embedding
+
+
+RAG flow:
+
+Admin Question
+      ↓
+Embedding
+      ↓
+PGVector
+      ↓
+Similarity Search
+      ↓
+Relevant Documents
+      ↓
+Controlled Context
+
+
+PGVector contains:
+
+1. Knowledge/RAG documents
+2. Indexed marketplace data
+
+
+Examples of knowledge data:
+
+- commodity explanations
+- stored documents
+- business rules
+- marketplace knowledge
+- relevant documentation
+
+
+Examples of indexed marketplace data:
+
+- market rates
+- rate history
+- buyer demands
+- listings
+- commodities
+- notifications
+- WhatsApp logs
+
+
+Use metadata where appropriate to distinguish:
+
+KNOWLEDGE
+
+and
+
+MARKETPLACE_DATA
+
+
+Do not use PGVector as a replacement for the Marketplace PostgreSQL database.
+
+Marketplace PostgreSQL remains the source of truth.
+
+
+After implementation:
+
+BUILD
+TEST
+REPORT
+STOP.
+
+
+==================================================
+STEP 11 — GEMINI INTEGRATION
+==================================================
+
+Use Google Gemini through Spring AI.
+
+Gemini is the LLM.
+
+Use the existing Spring AI Google Gemini dependency/configuration.
+
+Use Google Gemini Embedding for vector creation where configured.
+
+
+Do not hardcode:
+
+- API keys
+- passwords
+- secrets
+
+
+Use:
+
+- environment variables
+- application configuration
+- secure configuration
+
+
+Basic flow:
+
+Relevant Context
+      ↓
+Gemini
+      ↓
+Natural-language response
+
+
+Gemini must receive only the relevant controlled context.
+
+Gemini must not directly access:
+
+- PostgreSQL
+- PGVector credentials
+- Backend database
+- unrestricted backend APIs
+
+
+After implementation:
+
+BUILD
+TEST
+REPORT
+STOP.
+
+
+==================================================
+STEP 12 — RAG ADVISOR
+==================================================
+
+Configure Spring AI RAG/Vector Store Advisor as appropriate for the project.
+
+Expected flow:
+
+Question
+    ↓
+Vector Search
+    ↓
+Relevant Context
+    ↓
+Gemini
+    ↓
+Answer
+
+
+Do not send the entire vector database to Gemini.
+
+Only relevant retrieved context should be included.
+
+Keep RAG logic separated from normal application/business logic.
+
+Do not create unnecessary RAG layers if Spring AI already provides the required capability.
+
+Reuse existing configuration where appropriate.
+
+
+After implementation:
+
+BUILD
+TEST
+REPORT
+STOP.
+
+
+==================================================
+STEP 13 — MARKETPLACE DATA + RAG INTEGRATION
+==================================================
+
+Integrate the complete retrieval architecture.
+
+PATH 1 — KNOWLEDGE QUESTION
+
+Example:
+
+"What is corn gluten feed?"
+
+Flow:
+
+Admin
+ ↓
+IntentService
+ ↓
+RagService
+ ↓
+PGVector
+ ↓
+Knowledge Retrieval
+ ↓
+Relevant Context
+ ↓
+Gemini
+ ↓
+Answer
+
+
+PATH 2 — MARKETPLACE DATA QUESTION
+
+Example:
+
+"What is the current soybean rate in Sangli?"
+
+Flow:
+
+Admin
+ ↓
+IntentService
+ ↓
+RagService
+ ↓
+PGVector
+ ↓
+Marketplace Data Retrieval
+ ↓
+Relevant Context
+ ↓
+Gemini
+ ↓
+Answer
+
+
+PATH 3 — COMBINED QUESTION
+
+Example:
+
+"What is the current soybean rate in Sangli and explain soybean?"
+
+Flow:
+
+Admin
+ ↓
+IntentService
+ ↓
+RagService
+ ↓
+PGVector
+ ↓
+Retrieve marketplace data
++
+Retrieve knowledge
+ ↓
+Combined Context
+ ↓
+Gemini
+ ↓
+Answer
+
+
+IMPORTANT:
+
+Use ONE PGVector system.
+
+Do not create two separate vector databases.
+
+Use metadata/filtering where appropriate.
+
+Marketplace PostgreSQL remains the source of truth.
+
+PGVector is the indexed/searchable representation used by the Chatbot.
+
+
+IMPORTANT DATA FRESHNESS:
+
+If marketplace data changes in the Backend project, the Chatbot PGVector index must eventually be updated.
+
+The exact synchronization method may be:
+
+- scheduled synchronization
+- event/webhook
+- manual synchronization
+- another approved mechanism
+
+Do not invent a synchronization mechanism if the Backend Team has not defined one.
+
+Document the required synchronization contract if necessary.
+
+
+After implementation:
+
+BUILD
+TEST
+REPORT
+STOP.
+
+
+==================================================
+STEP 14 — CHAT HISTORY
+==================================================
+
+Store Admin chatbot conversation history.
+
+Flow:
+
+Admin Question
+      ↓
+ChatMessage
+      ↓
+Process Question
+      ↓
+RAG Retrieval
+      ↓
+Gemini
+      ↓
+AI Response
+      ↓
+ChatMessage
+
+
+ChatSession contains the conversation.
+
+ChatMessage contains individual messages.
+
+
+Example:
+
+ChatSession #1
+
+Message 1:
+ADMIN
+"XYZ current rate?"
+
+Message 2:
+ASSISTANT
+"XYZ current rate is ₹XXXX per MT."
+
+Message 3:
+ADMIN
+"What about yesterday?"
+
+Message 4:
+ASSISTANT
+"Yesterday's rate was ₹XXXX per MT."
+
+
+Do not store raw microphone audio in Phase 1.
+
+Store only the final speech-to-text result as ChatMessage.content.
+
+
+After implementation:
+
+BUILD
+TEST
+REPORT
+STOP.
+
+
+==================================================
+STEP 15 — ADMIN SECURITY
+==================================================
+
+The chatbot is ADMIN-ONLY.
+
+Protect:
+
+POST /api/admin/chat
+
+
+Use the project's existing authentication/security architecture.
+
+Do not create fake authentication.
+
+Normal users must not access the Admin chatbot.
+
+The chatbot must respect marketplace visibility rules.
+
+Do not expose protected information to unauthorized users.
+
+
+Prevent accidental leakage of:
+
+- supplier identity
+- current owner identity
+- buyer identity
+- internal ownership information
+
+
+Admin can have complete visibility according to authorization.
+
+
+Also ensure:
+
+- Chatbot APIs require appropriate authorization.
+- Backend integration credentials are protected.
+- Secrets are not hardcoded.
+- Gemini cannot bypass application authorization.
+
+
+After implementation:
+
+BUILD
+TEST
+REPORT
+STOP.
+
+
+==================================================
+STEP 16 — READ-ONLY PHASE 1
+==================================================
+
+The Admin AI can READ:
+
+- market_rates
+- rate_history
+- buyer_demands
+- listings
+- commodities
+- notifications
+- whatsapp_logs
+- RAG knowledge
+- indexed marketplace data
+
+
+The Admin AI CANNOT MODIFY:
+
+- users
+- rates
+- listings
+- demands
+- ownership
+- deals
+- contracts
+
+
+Do NOT create AI tools/functions that perform write operations.
+
+No:
+
+- create rate
+- update rate
+- delete rate
+- create listing
+- update listing
+- delete listing
+- create demand
+- update demand
+- delete demand
+
+
+Phase 1 is strictly READ-ONLY.
+
+
+After implementation:
+
+BUILD
+TEST
+REPORT
+STOP.
+
+
+==================================================
+STEP 17 — FUTURE ARCHITECTURE
+==================================================
+
+The architecture must remain extensible for future marketplace functionality.
+
+Do NOT implement these in Phase 1:
+
+- bids
+- negotiations
+- counter_offers
+- deals
+- contracts
+- ownership_history
+- quantity_locks
+
+
+These belong to future phases.
+
+Do not create unnecessary entities, repositories, APIs, or AI tools for them now.
+
+
+After implementation:
+
+BUILD
+TEST
+REPORT
+STOP.
+
+
+==================================================
+STEP 18 — BACKEND TESTING
+==================================================
+
+Test:
+
+POST /api/admin/chat
+
+
+Test at minimum:
+
+1. English question
+2. Marathi question
+3. Hindi question
+4. Current rate
+5. Today's demand
+6. Rate history
+7. 7-day rate trend
+8. Listing query
+9. Commodity knowledge query
+10. Notification query
+11. WhatsApp log query
+12. RAG query
+13. Indexed marketplace-data query
+14. Combined knowledge + marketplace query
+15. Unknown question
+16. Unauthorized access
+17. Empty/invalid message
+
+
+Verify:
+
+- correct intent selection
+- correct retrieval path
+- correct RAG retrieval
+- correct marketplace indexed-data retrieval
+- Gemini response
+- ChatSession saved
+- ChatMessage saved
+- read-only behavior
+- security
+- no direct database access by Gemini
+- no fake marketplace data
+- no identity leakage
+
+
+Build must succeed.
+
+Tests must pass.
+
+
+Return:
+
+- Build result
+- Test result
+- API test result
+- Integration status
+- Errors if any
+- Files modified
+- Known limitations
+
+
+STOP.
+
+
+==================================================
+STEP 19 — MULTILINGUAL SUPPORT
+==================================================
+
+The Admin AI must support:
+
+1. English
+2. Marathi
+3. Hindi
+
+
+The same API must be used:
+
+POST /api/admin/chat
+
+
+Examples:
+
+
+English:
+
+"What is XYZ current rate?"
+
+
+Marathi:
+
+"XYZ चा सध्याचा दर किती आहे?"
+
+
+Hindi:
+
+"XYZ का वर्तमान रेट क्या है?"
+
+
+The chatbot should respond in the language used by the Admin whenever possible.
+
+
+Example:
+
+Marathi question:
+
+"आज XYZ ची demand किती आहे?"
+
+Response:
+
+"आज XYZ ची एकूण demand 450 MT आहे."
+
+
+Hindi question:
+
+"आज XYZ की demand कितनी है?"
+
+Response:
+
+"आज XYZ की कुल demand 450 MT है."
+
+
+English question:
+
+"What is XYZ demand today?"
+
+Response:
+
+"Today's total demand for XYZ is 450 MT."
+
+
+Do not create separate APIs for each language.
+
+Do not create:
+
+/api/admin/chat/english
+/api/admin/chat/marathi
+/api/admin/chat/hindi
+
+
+Use only:
+
+POST /api/admin/chat
+
+
+After implementation:
+
+BUILD
+TEST
+REPORT
+STOP.
+
+
+==================================================
+STEP 20 — MICROPHONE / SPEECH-TO-TEXT
+==================================================
+
+This feature will be implemented in the React Admin Chatbot frontend.
+
+IMPORTANT:
+
+Do NOT work on React before the backend chatbot API is working and tested.
+
+Do NOT create a separate backend chatbot API for voice.
+
+The microphone is only an alternative input method.
+
+
+Flow:
+
+🎙 Microphone
+      ↓
+Speech-to-Text
+      ↓
+Text
+      ↓
+Chat Input
+      ↓
+POST /api/admin/chat
+      ↓
+Existing Admin Chatbot Backend
+
+
+Support:
+
+- English
+- Marathi
+- Hindi
+
+
+Use a simple language selector for the first version:
+
+English
+मराठी
+हिन्दी
+
+
+The selected language should be used for speech recognition.
+
+Normal keyboard input must continue working.
+
+
+UI should provide:
+
+- microphone button
+- recording state
+- recording timer
+- stop action
+- cancel action
+- recognized text
+- send button
+
+
+The Admin should be able to review/edit the recognized text before sending when practical.
+
+
+Do NOT create:
+
+/voice-chat
+/audio-chat
+/speech-chat
+
+
+Voice input must use:
+
+POST /api/admin/chat
+
+
+Do NOT store raw microphone audio in Phase 1.
+
+Store only the final speech-to-text result in ChatMessage.content.
+
+
+After implementation:
+
+BUILD
+TEST
+REPORT
+STOP.
+
+
+==================================================
+STEP 21 — FINAL INTEGRATION & END-TO-END TESTING
+==================================================
+
+Verify the complete system.
+
+
+FINAL DEVELOPMENT ORDER:
+
+PHASE 1 — CHATBOT BACKEND
+
+Complete and test:
+
+- ChatSession
+- ChatMessage
+- DTOs
+- Controller
+- AdminChatbotService
+- IntentService
+- RAG
+- Gemini
+- Embedding
+- PGVector
+- Chat history
+- Security
+- Read-only behavior
+
+
+PHASE 2 — BACKEND PROJECT INTEGRATION
+
+Connect the separate Marketplace Backend project through:
+
+Marketplace PostgreSQL
+      ↓
+Backend Services
+      ↓
+Controlled REST API
+      ↓
+HTTP / JSON
+      ↓
+Chatbot Data Ingestion
+      ↓
+Embedding
+      ↓
+Chatbot PGVector
+
+
+IMPORTANT:
+
+Do not directly connect to Marketplace PostgreSQL.
+
+Do not use Marketplace database credentials.
+
+Do not invent Backend API endpoints.
+
+Use the API contract provided by the Backend Team.
+
+
+PHASE 3 — FRONTEND
+
+Only after the backend chatbot API is working:
+
+React Admin UI
+      ↓
+POST /api/admin/chat
+      ↓
+AdminChatbotController
+      ↓
+AdminChatbotService
+      ↓
+RAG / PGVector
+      ↓
+Gemini
+      ↓
+Response
+      ↓
+React UI
+
+
+Then implement:
+
+- Chat UI
+- English/Marathi/Hindi selector
+- Microphone
+- Speech-to-text
+- Recording state
+- Recognized text
+- Send button
+- Chat history display
+- Loading state
+- Error handling
+
+
+FINAL ARCHITECTURE:
+
+                    ADMIN
+                      │
+             ┌────────┴────────┐
+             ↓                 ↓
+         Keyboard          🎙 Mic
+             │                 │
+             │          Speech → Text
+             │                 │
+             └────────┬────────┘
+                      ↓
+                Text Question
+                      ↓
+             POST /api/admin/chat
+                      ↓
+             AdminChatbotController
+                      ↓
+             AdminChatbotService
+                      ↓
+                IntentService
+                      ↓
+                  RagService
+                      ↓
+                   PGVector
+                      ↓
+              Relevant Context
+                      ↓
+                   Gemini
+                      ↓
+              Natural-language
+                   Response
+                      ↓
+                 ChatMessage
+                      ↓
+              Chatbot PostgreSQL
+
+
+MARKETPLACE DATA PIPELINE:
+
+Backend PostgreSQL
+        ↓
+Backend Services
+        ↓
+Controlled REST API
+        ↓
+HTTP / JSON
+        ↓
+Chatbot Data Ingestion
+
+        ↓
+Document/Text Preparation
+        ↓
+Gemini Embedding
+        ↓
+Chatbot PGVector
+        ↓
+RagService
+        ↓
+Gemini
+
+
+FINAL END-TO-END TESTING:
+
+✓ English
+✓ Marathi
+✓ Hindi
+✓ Keyboard input
+✓ Microphone input
+✓ Speech-to-text
+✓ Current rate
+✓ Today's demand
+✓ 7-day rate trend
+✓ Today's listings
+✓ Commodity information
+✓ Notifications
+✓ WhatsApp logs
+✓ RAG retrieval
+✓ Marketplace indexed-data retrieval
+✓ Combined RAG + marketplace data
+✓ ChatSession
+✓ ChatMessage
+✓ Chat history
+✓ Admin authorization
+✓ Unauthorized access blocked
+✓ Read-only behavior
+✓ No identity leakage
+✓ No unrestricted database access
+✓ No direct Marketplace PostgreSQL access
+✓ HTTP/JSON backend integration
+✓ Marketplace data ingestion
+✓ Embedding
+✓ PGVector indexing
+✓ Invalid question handling
+✓ Empty question handling
+
+
+FINAL CHECKS:
+
+BUILD SUCCESS
+
+ALL TESTS PASSED
+
+Return a final integration report containing:
+
+1. Final package structure
+2. Files created
+3. Files modified
+4. API endpoints
+5. Database tables used
+6. RAG/PGVector configuration
+7. Gemini configuration
+8. Embedding configuration
+9. Security configuration
+10. Marketplace Backend API integration
+11. HTTP/JSON data flow
+12. Marketplace data ingestion
+13. Multilingual implementation
+14. Microphone implementation
+15. Test results
+16. Known limitations
+17. Recommended next development step
+
+STOP.
+
+
+==================================================
+ANTIGRAVITY DEVELOPMENT RULES
+==================================================
+
+RULE 1:
+Backend first.
+
+RULE 2:
+Do not work on React until the backend chatbot API is working and tested.
+
+RULE 3:
+Before creating a class, check whether it already exists.
+
+RULE 4:
+Never create duplicate classes.
+
+RULE 5:
+Never overwrite existing functionality without inspecting it first.
+
+RULE 6:
+Keep the implementation simple and readable.
+
+RULE 7:
+Follow:
+
+Controller
+    ↓
+Service
+    ↓
+Repository
+    ↓
+Database
+
+
+RULE 8:
+Keep AI logic separated from normal business logic.
+
+RULE 9:
+Gemini must never directly access PostgreSQL.
+
+RULE 10:
+The Chatbot project must NOT directly access the Marketplace PostgreSQL database.
+
+RULE 11:
+Marketplace data must be received through controlled Backend REST APIs / approved synchronization.
+
+RULE 12:
+Use HTTP/JSON for communication between the separate Backend and Chatbot projects.
+
+RULE 13:
+Use PGVector for semantic/RAG retrieval.
+
+RULE 14:
+PGVector is an indexed/searchable representation, NOT the Marketplace source of truth.
+
+RULE 15:
+Marketplace PostgreSQL remains the source of truth.
+
+RULE 16:
+Never hardcode API keys, passwords, database credentials, or secrets.
+
+RULE 17:
+Phase 1 Admin AI is READ-ONLY.
+
+RULE 18:
+Do not implement future bidding/deal/contract functionality.
+
+RULE 19:
+Do not create unnecessary microservices.
+
+RULE 20:
+Do not create unnecessary APIs.
+
+RULE 21:
+Do not duplicate existing marketplace entities or services.
+
+RULE 22:
+Do not invent fake marketplace data.
+
+RULE 23:
+Do not invent Backend API endpoints when the Backend Team has not provided the API contract.
+
+RULE 24:
+If the Backend API is not available yet, document the required API contract and keep the integration abstraction ready.
+
+RULE 25:
+Use ONE PGVector system unless explicitly required otherwise.
+
+RULE 26:
+Do not store raw microphone audio in Phase 1.
+
+RULE 27:
+Use the same POST /api/admin/chat API for keyboard and speech-to-text input.
+
+RULE 28:
+After every development step:
+
+BUILD
+TEST
+REPORT
+STOP
+
+
+RULE 29:
+Do NOT automatically continue to the next step.
+
+RULE 30:
+Only proceed to the next step when explicitly instructed.
+
+
+After each step report:
+
+- Files created
+- Files modified
+- What was implemented
+- Build result
+- Test result
+- Errors/problems
+- Next step
+
+Then STOP.
+
+
+==================================================
+CURRENT DEVELOPMENT STATUS
+==================================================
+
+Steps completed:
+
+✓ STEP 01 — Project Inspection
+✓ STEP 02 — Simple Backend Package Structure
+✓ STEP 03 — ChatSession Entity
+✓ STEP 04 — ChatMessage Entity
+✓ STEP 05 — Chat DTOs
+
+
+CURRENT STEP:
+
+STEP 06 — AdminChatbotController
+
+
+IMPORTANT:
+
+The corrected architecture in this prompt must be followed from STEP 06 onward.
+
+Do NOT use the old architecture where the Chatbot directly queries Marketplace PostgreSQL.
+
+The Marketplace Backend is a separate project.
+
+Marketplace data will later come through controlled REST APIs using HTTP/JSON and will be indexed into the Chatbot project's PGVector.
+
+
+==================================================
+CURRENT FIRST ACTION
+==================================================
+
+START ONLY WITH:
+
+STEP 06 — ADMIN CHATBOT CONTROLLER
+
+Before making changes:
+
+1. Inspect the existing project.
+2. Verify whether AdminChatbotController.java already exists.
+3. Verify the existing ChatRequest.java.
+4. Verify the existing ChatResponse.java.
+5. Verify the existing package structure.
+6. Do not create duplicates.
+
+Implement ONLY:
+
+STEP 06 — ADMIN CHATBOT CONTROLLER
+
+Endpoint:
+
+POST /api/admin/chat
+
+
+Responsibilities:
+
+- receive ChatRequest
+- validate request
+- call AdminChatbotService
+- return ChatResponse
+
+
+Do NOT implement:
+
+- Step 07
+- IntentService
+- RAG
+- Gemini
+- Marketplace Backend integration
+- HTTP/JSON synchronization
+- PGVector marketplace ingestion
+- React frontend
+- microphone
+- speech-to-text
+
+
+Controller must remain thin.
+
+Do not put AI logic, RAG logic, database logic, or business logic inside the controller.
+
+
+After completing STEP 06:
+
+1. BUILD the project.
+2. Run relevant tests.
+3. Report files created.
+4. Report files modified.
+5. Explain what was implemented.
+6. Report build result.
+7. Report test result.
+8. Report errors/problems.
+9. Report the next step.
+
+Then:
+
+STOP.
+
+DO NOT START STEP 07 AUTOMATICALLY.
+

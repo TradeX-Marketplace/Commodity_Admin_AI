@@ -1,0 +1,117 @@
+{
+  "testSuite": "SyntheticOrdersVerification",
+  "generatedAt": "2026-10-21T10:42:00+05:30",
+  "environment": {
+    "module": "Commodity_Admin_AI",
+    "port": 9090,
+    "tradexBackendUrl": "http://localhost:8080",
+    "syntheticOrdersEnabled": true
+  },
+  "overallMetrics": {
+    "totalOrderCount": 10,
+    "totalOrderValue": 4168725.00,
+    "totalQuantity": 1035.00,
+    "unit": "Quintal",
+    "statusBreakdown": {
+      "CONFIRMED": 3,
+      "COMPLETED": 5,
+      "PENDING": 1,
+      "CANCELLED": 1
+    },
+    "commodityBreakdown": {
+      "Soybean": 5,
+      "Wheat": 2,
+      "Cotton": 2,
+      "Maize": 1
+    }
+  },
+  "filteringTests": [
+    {
+      "testName": "Today Orders",
+      "filter": {
+        "startDate": "2026-10-21",
+        "endDate": "2026-10-21"
+      },
+      "matchedOrderCount": 2,
+      "totalValue": 675000.00,
+      "totalQuantity": 150.00,
+      "orderIds": [101, 102],
+      "status": "PASS"
+    },
+    {
+      "testName": "Yesterday Orders",
+      "filter": {
+        "startDate": "2026-10-20",
+        "endDate": "2026-10-20"
+      },
+      "matchedOrderCount": 2,
+      "totalValue": 1307500.00,
+      "totalQuantity": 350.00,
+      "orderIds": [103, 104],
+      "status": "PASS"
+    },
+    {
+      "testName": "Historical Date Window (2026-10-14)",
+      "filter": {
+        "startDate": "2026-10-14",
+        "endDate": "2026-10-14"
+      },
+      "matchedOrderCount": 3,
+      "totalValue": 843825.00,
+      "totalQuantity": 285.00,
+      "orderIds": [106, 107, 108],
+      "status": "PASS"
+    },
+    {
+      "testName": "Historical Date Window (2026-10-10 to 2026-10-20)",
+      "filter": {
+        "startDate": "2026-10-10",
+        "endDate": "2026-10-20"
+      },
+      "matchedOrderCount": 6,
+      "totalValue": 3204875.00,
+      "totalQuantity": 680.00,
+      "orderIds": [103, 104, 105, 106, 107, 108, 109],
+      "status": "PASS"
+    },
+    {
+      "testName": "Buyer Filter (Vishal Patil)",
+      "filter": {
+        "buyerName": "Vishal Patil"
+      },
+      "matchedOrderCount": 3,
+      "totalValue": 996375.00,
+      "totalQuantity": 225.00,
+      "orderIds": [101, 102, 107],
+      "status": "PASS"
+    },
+    {
+      "testName": "Commodity Filter (Soybean on 2026-10-15)",
+      "filter": {
+        "commodityName": "Soybean",
+        "startDate": "2026-10-15",
+        "endDate": "2026-10-15"
+      },
+      "matchedOrderCount": 0,
+      "note": "On 2026-10-15 only Cotton order 105 was placed; 0 Soybean orders returned accurately",
+      "status": "PASS"
+    },
+    {
+      "testName": "Commodity Filter (Soybean Global)",
+      "filter": {
+        "commodityName": "Soybean"
+      },
+      "matchedOrderCount": 5,
+      "totalValue": 2345975.00,
+      "totalQuantity": 535.00,
+      "orderIds": [101, 102, 103, 107, 110],
+      "status": "PASS"
+    },
+    {
+      "testName": "Privacy Audit",
+      "description": "Verifies customer phone numbers are strictly suppressed from all AI response texts, summary markdown tables, and searchable vector document content/metadata",
+      "phoneExposureCount": 0,
+      "status": "PASS"
+    }
+  ]
+}

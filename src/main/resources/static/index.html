@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin AI Chatbot — Speech-to-Text &amp; Chat Console (Step 20)</title>
+    <style>
+        :root {
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --border-color: #e2e8f0;
+            --primary-color: #1e40af;
+            --primary-hover: #1d4ed8;
+            --recording-color: #dc2626;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --bot-bg: #f1f5f9;
+            --user-bg: #e0f2fe;
+            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            padding: 24px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: var(--card-bg);
+            border: 100px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        header {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 12px;
+        }
+
+        h1 {
+            font-size: 1.25rem;
+            color: var(--primary-color);
+            margin-bottom: 4px;
+        }
+
+        .subtitle {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .alert-box {
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            display: none;
+        }
+
+        .alert-error {
+            background-color: #fef2f2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+
+        .alert-warning {
+            background-color: #fffbeb;
+            color: #92400e;
+            border: 1px solid #fde68a;
+        }
+
+        .alert-info {
+            background-color: #eff6ff;
+            color: #1e40af;
+            border: 1px solid #bfdbfe;
+        }
+
+        .config-row {
+            display: grid;
+            grid-template-columns: 1fr 140px;
+            gap: 12px;
+            font-size: 0.85rem;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: var(--text-muted);
+        }
+
+        input[type="text"], select, textarea {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-family: inherit;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 70px;
+        }
+
+        .chat-history {
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 14px;
+            min-height: 200px;
+            max-height: 340px;
+            overflow-y: auto;
+            background: #fafafa;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .message-bubble {
+            max-width: 80%;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            white-space: pre-wrap;
+        }
+
+        .bubble-admin {
+            align-self: flex-end;
+            background-color: var(--user-bg);
+            border: 1px solid #bae6fd;
+        }
+
+        .bubble-bot {
+            align-self: flex-start;
+            background-color: var(--bot-bg);
+            border: 1px solid var(--border-color);
+        }
+
+        .bubble-meta {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .input-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .button-bar {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        button {
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.15s ease;
+        }
+
+        .btn-send {
+            background-color: var(--primary-color);
+            color: white;
+            flex-grow: 1;
+        }
+
+        .btn-send:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .btn-mic {
+            background-color: #e2e8f0;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-mic.recording {
+            background-color: var(--recording-color);
+            color: white;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.4); }
+            70% { box-shadow: 0 0 0 8px rgba(220, 38, 38, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
+        }
+
+        .recording-status {
+            font-size: 0.8rem;
+            color: var(--recording-color);
+            font-weight: 600;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Admin AI Chatbot — Speech &amp; Chat Console</h1>
+        <p class="subtitle">Step 20: Microphone / Speech-to-Text Integration (Web Speech API → POST /api/admin/chat)</p>
+    </header>
+
+    <!-- Browser Support Warning -->
+    <div id="unsupportedAlert" class="alert-box alert-warning">
+        <strong>Notice:</strong> Your browser does not natively support the Web Speech API. Microphone input will be disabled. You can continue using keyboard input or switch to Chrome/Edge.
+    </div>
+
+    <!-- Error/Status Alert -->
+    <div id="statusAlert" class="alert-box alert-error"></div>
+
+    <!-- Auth & Language Configuration -->
+    <div class="config-row">
+        <div>
+            <label for="jwtToken">Admin JWT Token (Bearer)</label>
+            <input type="text" id="jwtToken" placeholder="Paste ADMIN JWT token here...">
+        </div>
+        <div>
+            <label for="sttLanguage">Speech Language</label>
+            <select id="sttLanguage">
+                <option value="en-IN" selected>English (en-IN)</option>
+                <option value="mr-IN">मराठी (mr-IN)</option>
+                <option value="hi-IN">हिंदी (hi-IN)</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Chat History -->
+    <div class="chat-history" id="chatHistory">
+        <div class="message-bubble bubble-bot">
+            Welcome, Administrator. You can speak into the microphone or type your question below.
+            <div class="bubble-meta">Supported: English, मराठी (Marathi), हिंदी (Hindi)</div>
+        </div>
+    </div>
+
+    <!-- Input Section -->
+    <div class="input-controls">
+        <div>
+            <label for="questionInput">Question (Voice transcription or Typed text):</label>
+            <textarea id="questionInput" placeholder="Click the microphone to speak, or type your question here..."></textarea>
+        </div>
+
+        <div class="button-bar">
+            <button id="micBtn" class="btn-mic" type="button" title="Click to start/stop microphone">
+                <span id="micIcon">🎤</span> <span id="micLabel">Speak</span>
+            </button>
+            <span id="recordingIndicator" class="recording-status">● Listening...</span>
+            <button id="sendBtn" class="btn-send" type="button">Send Question</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // =========================================================================
+    // STEP 20: SPEECH-TO-TEXT & ADMIN CHATBOT CLIENT CONTROLLER
+    // =========================================================================
+    (function () {
+        // DOM Elements
+        const unsupportedAlert = document.getElementById('unsupportedAlert');
+        const statusAlert = document.getElementById('statusAlert');
+        const jwtTokenInput = document.getElementById('jwtToken');
+        const sttLanguageSelect = document.getElementById('sttLanguage');
+        const chatHistory = document.getElementById('chatHistory');
+        const questionInput = document.getElementById('questionInput');
+        const micBtn = document.getElementById('micBtn');
+        const micLabel = document.getElementById('micLabel');
+        const recordingIndicator = document.getElementById('recordingIndicator');
+        const sendBtn = document.getElementById('sendBtn');
+
+        let currentSessionId = null;
+        let isRecording = false;
+        let recognition = null;
+
+        // Check Web Speech API Support
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+        if (!SpeechRecognition) {
+            unsupportedAlert.style.display = 'block';
+            micBtn.disabled = true;
+            micBtn.style.opacity = '0.5';
+            micBtn.title = 'Speech recognition not supported in this browser';
+        } else {
+            recognition = new SpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = true;
+            recognition.maxAlternatives = 1;
+
+            recognition.onstart = function () {
+                isRecording = true;
+                micBtn.classList.add('recording');
+                micLabel.textContent = 'Stop';
+                recordingIndicator.style.display = 'inline';
+                clearAlert();
+            };
+
+            recognition.onresult = function (event) {
+                let interimTranscript = '';
+                let finalTranscript = '';
+
+                for (let i = event.resultIndex; i < event.results.length; ++i) {
+                    const transcript = event.results[i][0].transcript;
+                    if (event.results[i].isFinal) {
+                        finalTranscript += transcript;
+                    } else {
+                        interimTranscript += transcript;
+                    }
+                }
+
+                // Ordinary text is placed directly into the question input field
+                if (finalTranscript.trim()) {
+                    questionInput.value = finalTranscript.trim();
+                } else if (interimTranscript.trim()) {
+                    questionInput.value = interimTranscript.trim();
+                }
+            };
+
+            recognition.onerror = function (event) {
+                let errorMessage = 'Speech recognition error: ' + event.error;
+                if (event.error === 'not-allowed') {
+                    errorMessage = 'Microphone access was denied. Please allow microphone permissions in your browser.';
+                } else if (event.error === 'no-speech') {
+                    errorMessage = 'No speech was detected. Please try speaking again.';
+                }
+                showAlert(errorMessage, 'error');
+                stopRecording();
+            };
+
+            recognition.onend = function () {
+                stopRecording();
+            };
+        }
+
+        // Toggle Microphone
+        micBtn.addEventListener('click', function () {
+            if (!recognition) return;
+
+            if (isRecording) {
+                recognition.stop();
+                stopRecording();
+            } else {
+                try {
+                    recognition.lang = sttLanguageSelect.value || 'en-IN';
+                    recognition.start();
+                } catch (e) {
+                    showAlert('Unable to start speech recognition: ' + e.message, 'error');
+                    stopRecording();
+                }
+            }
+        });
+
+        function stopRecording() {
+            isRecording = false;
+            micBtn.classList.remove('recording');
+            micLabel.textContent = 'Speak';
+            recordingIndicator.style.display = 'none';
+        }
+
+        // Send Question to existing POST /api/admin/chat
+        sendBtn.addEventListener('click', sendQuestion);
+        questionInput.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendQuestion();
+            }
+        });
+
+        async function sendQuestion() {
+            const message = questionInput.value.trim();
+            if (!message) {
+                showAlert('Please speak or type a question before sending.', 'warning');
+                return;
+            }
+
+            clearAlert();
+            appendMessage('ADMIN', message);
+            questionInput.value = '';
+
+            const token = jwtTokenInput.value.trim();
+            const headers = { 'Content-Type': 'application/json' };
+            if (token) {
+                headers['Authorization'] = token.startsWith('Bearer ') ? token : 'Bearer ' + token;
+            }
+
+            const payload = {
+                sessionId: currentSessionId,
+                message: message
+            };
+
+            sendBtn.disabled = true;
+            sendBtn.textContent = 'Sending...';
+
+            try {
+                const response = await fetch('/api/admin/chat', {
+                    method: 'POST',
+                    headers: headers,
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    const errText = data.message || ('Error ' + response.status + ': ' + response.statusText);
+                    appendMessage('BOT', '⚠️ Error: ' + errText);
+                    showAlert(errText, 'error');
+                } else {
+                    if (data.sessionId) {
+                        currentSessionId = data.sessionId;
+                    }
+                    appendMessage('BOT', data.message, data.language);
+                }
+            } catch (err) {
+                appendMessage('BOT', '⚠️ Network error communicating with /api/admin/chat: ' + err.message);
+                showAlert('Network error: ' + err.message, 'error');
+            } finally {
+                sendBtn.disabled = false;
+                sendBtn.textContent = 'Send Question';
+            }
+        }
+
+        function appendMessage(role, text, language) {
+            const bubble = document.createElement('div');
+            bubble.classList.add('message-bubble');
+            bubble.classList.add(role === 'ADMIN' ? 'bubble-admin' : 'bubble-bot');
+            bubble.textContent = text;
+
+            if (role === 'BOT' && language) {
+                const meta = document.createElement('div');
+                meta.classList.add('bubble-meta');
+                meta.textContent = 'Detected Language: ' + language;
+                bubble.appendChild(meta);
+            }
+
+            chatHistory.appendChild(bubble);
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+        }
+
+        function showAlert(msg, type) {
+            statusAlert.textContent = msg;
+            statusAlert.className = 'alert-box alert-' + type;
+            statusAlert.style.display = 'block';
+        }
+
+        function clearAlert() {
+            statusAlert.style.display = 'none';
+            statusAlert.textContent = '';
+        }
+    })();
+</script>
+
+</body>
+</html>

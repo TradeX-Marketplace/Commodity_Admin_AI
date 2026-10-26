@@ -1,0 +1,402 @@
+[
+  {
+    "id": "q-rates-1",
+    "categoryId": "RATES",
+    "commodity": "Soybean",
+    "en": "Show me the Soybean rate for the last 7 days.",
+    "hi": "पिछले 7 दिनों का सोयाबीन का रेट दिखाएं।",
+    "mr": "गेल्या ७ दिवसांचे सोयाबीनचे दर दाखवा."
+  },
+  {
+    "id": "q-rates-2",
+    "categoryId": "RATES",
+    "commodity": "Soybean",
+    "en": "What is today's Soybean rate?",
+    "hi": "सोयाबीन का आज का भाव क्या है?",
+    "mr": "सोयाबीनचा आजचा दर काय आहे?"
+  },
+  {
+    "id": "q-rates-3",
+    "categoryId": "RATES",
+    "commodity": "Soybean",
+    "en": "What is the Soybean rate in Sangli?",
+    "hi": "सांगली में सोयाबीन का भाव क्या है?",
+    "mr": "सांगलीमध्ये सोयाबीनचा दर काय आहे?"
+  },
+  {
+    "id": "q-rates-4",
+    "categoryId": "RATES",
+    "commodity": "Soybean",
+    "en": "Show me the last 7 days of Soybean rates in Sangli.",
+    "hi": "सांगली में पिछले 7 दिनों का सोयाबीन का रेट दिखाएं।",
+    "mr": "सांगलीतील गेल्या ७ दिवसांचे सोयाबीनचे दर दाखवा."
+  },
+  {
+    "id": "q-rates-5",
+    "categoryId": "RATES",
+    "commodity": "Soybean",
+    "en": "Compare today's Soybean rates across locations.",
+    "hi": "विभिन्न स्थानों पर आज के सोयाबीन भाव की तुलना करें।",
+    "mr": "वेगवेगळ्या ठिकाणांवरील आजच्या सोयाबीन दरांची तुलना करा."
+  },
+  {
+    "id": "q-rates-6",
+    "categoryId": "RATES",
+    "commodity": "Soybean",
+    "en": "Show me the highest and lowest Soybean rates for the last 7 days.",
+    "hi": "पिछले 7 दिनों में सोयाबीन का उच्चतम और न्यूनतम भाव दिखाएं।",
+    "mr": "गेल्या ७ दिवसांतील सोयाबीनचे कमाल व किमान दर दाखवा."
+  },
+  {
+    "id": "q-rates-7",
+    "categoryId": "RATES",
+    "commodity": "Soybean",
+    "en": "Plot a chart of Soybean rates for the last 7 days.",
+    "hi": "पिछले 7 दिनों के सोयाबीन भाव का चार्ट बनाएं।",
+    "mr": "गेल्या ७ दिवसांच्या सोयाबीन दरांचा चार्ट काढा."
+  },
+  {
+    "id": "q-rates-8",
+    "categoryId": "RATES",
+    "commodity": "Soybean",
+    "en": "Compare Soybean rates for the last 7 days with the previous 7 days.",
+    "hi": "पिछले 7 दिनों के सोयाबीन भाव की तुलना उससे पिछले 7 दिनों से करें।",
+    "mr": "गेल्या ७ दिवसांच्या सोयाबीन दरांची मागील ७ दिवसांशी तुलना करा."
+  },
+  {
+    "id": "q-rates-9",
+    "categoryId": "RATES",
+    "commodity": "Soybean",
+    "en": "Show me all actual Soybean records.",
+    "hi": "सोयाबीन के सभी वास्तविक रिकॉर्ड दिखाएं।",
+    "mr": "सोयाबीनच्या सर्व प्रत्यक्ष नोंदी दाखवा."
+  },
+  {
+    "id": "q-demands-1",
+    "categoryId": "DEMANDS",
+    "commodity": "Soybean",
+    "en": "What is today's demand for Soybean?",
+    "hi": "आज सोयाबीन की मांग क्या है?",
+    "mr": "आज सोयाबीनची मागणी काय आहे?"
+  },
+  {
+    "id": "q-demands-2",
+    "categoryId": "DEMANDS",
+    "commodity": "Soybean",
+    "en": "Today what is the demand for Soybean?",
+    "hi": "सोयाबीन के लिए आज की मांग क्या है?",
+    "mr": "सोयाबीनसाठी आजची मागणी काय आहे?"
+  },
+  {
+    "id": "q-demands-3",
+    "categoryId": "DEMANDS",
+    "en": "Show me all active buyer demands.",
+    "hi": "सभी सक्रिय खरीदार मांग दिखाएं।",
+    "mr": "सर्व सक्रिय खरेदीदार मागण्या दाखवा."
+  },
+  {
+    "id": "q-demands-4",
+    "categoryId": "DEMANDS",
+    "en": "How many buyer demands are registered in Sangli?",
+    "hi": "सांगली में कितनी खरीदार मांगें दर्ज हैं?",
+    "mr": "सांगलीमध्ये किती खरेदीदार मागण्या नोंदवल्या आहेत?"
+  },
+  {
+    "id": "q-demands-5",
+    "categoryId": "DEMANDS",
+    "en": "Show me the requested quantity for each commodity.",
+    "hi": "प्रत्येक कमोडिटी के लिए मांगी गई मात्रा दिखाएं।",
+    "mr": "प्रत्येक शेतमालासाठी मागितलेले प्रमाण दाखवा."
+  },
+  {
+    "id": "q-demands-6",
+    "categoryId": "DEMANDS",
+    "en": "Show me buyer demands with their target prices.",
+    "hi": "खरीदार मांगें उनके लक्षित मूल्यों के साथ दिखाएं।",
+    "mr": "खरेदीदार मागण्या त्यांच्या अपेक्षित दरांसह दाखवा."
+  },
+  {
+    "id": "q-demands-7",
+    "categoryId": "DEMANDS",
+    "en": "Which commodities have the highest buyer demand?",
+    "hi": "किस कमोडिटी में सबसे अधिक खरीदार मांग है?",
+    "mr": "कोणत्या शेतमालाला सर्वाधिक खरेदीदार मागणी आहे?"
+  },
+  {
+    "id": "q-demands-8",
+    "categoryId": "DEMANDS",
+    "en": "Show me all pending buyer demands.",
+    "hi": "सभी लंबित खरीदार मांगें दिखाएं।",
+    "mr": "सर्व प्रलंबित खरेदीदार मागण्या दाखवा."
+  },
+  {
+    "id": "q-demands-9",
+    "categoryId": "DEMANDS",
+    "commodity": "Soybean",
+    "en": "Find supplies matching active Soybean demands.",
+    "hi": "सक्रिय सोयाबीन मांग से मेल खाने वाली आपूर्ति खोजें।",
+    "mr": "सक्रिय सोयाबीन मागणीशी जुळणारा पुरवठा शोधा."
+  },
+  {
+    "id": "q-supplies-1",
+    "categoryId": "SUPPLIES",
+    "en": "Show me all active supplies.",
+    "hi": "सभी सक्रिय आपूर्ति दिखाएं।",
+    "mr": "सर्व सक्रिय पुरवठा नोंदी दाखवा."
+  },
+  {
+    "id": "q-supplies-2",
+    "categoryId": "SUPPLIES",
+    "commodity": "Soybean",
+    "en": "How much Soybean is available in the marketplace?",
+    "hi": "बाजार में कितना सोयाबीन उपलब्ध है?",
+    "mr": "बाजारपेठेत किती सोयाबीन उपलब्ध आहे?"
+  },
+  {
+    "id": "q-supplies-3",
+    "categoryId": "SUPPLIES",
+    "commodity": "Soybean",
+    "en": "Show me Soybean supplies in Sangli.",
+    "hi": "सांगली में सोयाबीन की आपूर्ति दिखाएं।",
+    "mr": "सांगलीतील सोयाबीन पुरवठा दाखवा."
+  },
+  {
+    "id": "q-supplies-4",
+    "categoryId": "SUPPLIES",
+    "en": "Which suppliers have the largest available quantities?",
+    "hi": "किन विक्रेताओं के पास सबसे अधिक उपलब्ध मात्रा है?",
+    "mr": "कोणत्या पुरवठादारांकडे सर्वाधिक उपलब्ध प्रमाण आहे?"
+  },
+  {
+    "id": "q-supplies-5",
+    "categoryId": "SUPPLIES",
+    "en": "Show me supplies with prices below ₹4,500 per quintal.",
+    "hi": "₹4,500 प्रति क्विंटल से कम दर वाली आपूर्ति दिखाएं।",
+    "mr": "₹४,५०० प्रति क्विंटलपेक्षा कमी दर असलेला पुरवठा दाखवा."
+  },
+  {
+    "id": "q-supplies-6",
+    "categoryId": "SUPPLIES",
+    "en": "Which supplies have expired validity dates?",
+    "hi": "किन आपूर्तियों की वैधता समाप्त हो चुकी है?",
+    "mr": "कोणत्या पुरवठ्याची मुदत संपलेली आहे?"
+  },
+  {
+    "id": "q-supplies-7",
+    "categoryId": "SUPPLIES",
+    "en": "Show me supplies expiring in the next 7 days.",
+    "hi": "अगले 7 दिनों में समाप्त होने वाली आपूर्ति दिखाएं।",
+    "mr": "पुढील ७ दिवसांत मुदत संपणारा पुरवठा दाखवा."
+  },
+  {
+    "id": "q-supplies-8",
+    "categoryId": "SUPPLIES",
+    "en": "Compare available quantities across commodities.",
+    "hi": "विभिन्न कमोडिटी की उपलब्ध मात्रा की तुलना करें।",
+    "mr": "विविध शेतमालाच्या उपलब्ध प्रमाणाची तुलना करा."
+  },
+  {
+    "id": "q-bids-1",
+    "categoryId": "BIDS",
+    "en": "How many bids are currently active?",
+    "hi": "वर्तमान में कितनी बोलियां सक्रिय हैं?",
+    "mr": "सध्या किती बोली सक्रिय आहेत?"
+  },
+  {
+    "id": "q-bids-2",
+    "categoryId": "BIDS",
+    "en": "Show me all pending bids.",
+    "hi": "सभी लंबित बोलियां दिखाएं।",
+    "mr": "सर्व प्रलंबित बोली दाखवा."
+  },
+  {
+    "id": "q-bids-3",
+    "categoryId": "BIDS",
+    "commodity": "Soybean",
+    "en": "What is the highest bid for Soybean?",
+    "hi": "सोयाबीन के लिए उच्चतम बोली क्या है?",
+    "mr": "सोयाबीनसाठी सर्वाधिक बोली कोणती आहे?"
+  },
+  {
+    "id": "q-bids-4",
+    "categoryId": "BIDS",
+    "en": "Show me ongoing negotiations.",
+    "hi": "चालू बातचीत (नेगोशिएशन) दिखाएं।",
+    "mr": "सुरू असलेल्या वाटाघाटी दाखवा."
+  },
+  {
+    "id": "q-bids-5",
+    "categoryId": "BIDS",
+    "en": "Show me the latest negotiation rounds.",
+    "hi": "नवीनतम बातचीत के दौर दिखाएं।",
+    "mr": "वाटाघाटीच्या ताज्या फेऱ्या दाखवा."
+  },
+  {
+    "id": "q-bids-6",
+    "categoryId": "BIDS",
+    "en": "Which negotiations are awaiting a response?",
+    "hi": "किन बातचीतों में प्रतिक्रिया की प्रतीक्षा है?",
+    "mr": "कोणत्या वाटाघाटी प्रतिसादाच्या प्रतीक्षेत आहेत?"
+  },
+  {
+    "id": "q-bids-7",
+    "categoryId": "BIDS",
+    "en": "Show me the bid price and asking price for each available listing.",
+    "hi": "प्रत्येक उपलब्ध लिस्टिंग के लिए बोली दर और मांग दर दिखाएं।",
+    "mr": "प्रत्येक उपलब्ध पुरवठ्यासाठी बोली दर व अपेक्षित दर दाखवा."
+  },
+  {
+    "id": "q-deals-1",
+    "categoryId": "DEALS",
+    "en": "How many deals are currently registered?",
+    "hi": "वर्तमान में कितने सौदे पंजीकृत हैं?",
+    "mr": "सध्या किती सौदे नोंदणीकृत आहेत?"
+  },
+  {
+    "id": "q-deals-2",
+    "categoryId": "DEALS",
+    "en": "Show me all active deals.",
+    "hi": "सभी सक्रिय सौदे दिखाएं।",
+    "mr": "सर्व सक्रिय सौदे दाखवा."
+  },
+  {
+    "id": "q-deals-3",
+    "categoryId": "DEALS",
+    "en": "Show me pending contracts.",
+    "hi": "लंबित अनुबंध (कॉन्ट्रैक्ट) दिखाएं।",
+    "mr": "प्रलंबित करार दाखवा."
+  },
+  {
+    "id": "q-deals-4",
+    "categoryId": "DEALS",
+    "en": "Show me completed contracts.",
+    "hi": "पूरे हो चुके अनुबंध दिखाएं।",
+    "mr": "पूर्ण झालेले करार दाखवा."
+  },
+  {
+    "id": "q-deals-5",
+    "categoryId": "DEALS",
+    "en": "Show me the commodity, quantity, and agreed price for each deal.",
+    "hi": "प्रत्येक सौदे के लिए कमोडिटी, मात्रा और तय मूल्य दिखाएं।",
+    "mr": "प्रत्येक सौद्यासाठी शेतमाल, प्रमाण आणि ठरलेला दर दाखवा."
+  },
+  {
+    "id": "q-deals-6",
+    "categoryId": "DEALS",
+    "en": "Which contracts are still pending?",
+    "hi": "कौन से अनुबंध अभी भी लंबित हैं?",
+    "mr": "कोणते करार अजूनही प्रलंबित आहेत?"
+  },
+  {
+    "id": "q-deals-7",
+    "categoryId": "DEALS",
+    "en": "Summarize deal and contract statuses.",
+    "hi": "सौदे और अनुबंध की स्थिति का सारांश दें।",
+    "mr": "सौदे आणि करारांच्या स्थितीचा सारांश द्या."
+  },
+  {
+    "id": "q-parties-1",
+    "categoryId": "PARTIES",
+    "en": "How many parties are registered in the marketplace?",
+    "hi": "बाजार में कितनी पार्टियां पंजीकृत हैं?",
+    "mr": "बाजारपेठेत किती व्यापारी नोंदणीकृत आहेत?"
+  },
+  {
+    "id": "q-parties-2",
+    "categoryId": "PARTIES",
+    "en": "Which parties are registered in Sangli?",
+    "hi": "सांगली में कौन सी पार्टियां पंजीकृत हैं?",
+    "mr": "सांगलीत कोणते व्यापारी नोंदणीकृत आहेत?"
+  },
+  {
+    "id": "q-parties-3",
+    "categoryId": "PARTIES",
+    "en": "Show me all registered buyers.",
+    "hi": "सभी पंजीकृत खरीदार दिखाएं।",
+    "mr": "सर्व नोंदणीकृत खरेदीदार दाखवा."
+  },
+  {
+    "id": "q-parties-4",
+    "categoryId": "PARTIES",
+    "en": "Show me all registered suppliers.",
+    "hi": "सभी पंजीकृत विक्रेता दिखाएं।",
+    "mr": "सर्व नोंदणीकृत पुरवठादार दाखवा."
+  },
+  {
+    "id": "q-parties-5",
+    "categoryId": "PARTIES",
+    "en": "Show me the party details and locations.",
+    "hi": "पार्टियों का विवरण और उनके स्थान दिखाएं।",
+    "mr": "व्यापाऱ्यांचे तपशील आणि ठिकाणे दाखवा."
+  },
+  {
+    "id": "q-parties-6",
+    "categoryId": "PARTIES",
+    "en": "How many buyers and suppliers are active?",
+    "hi": "कितने खरीदार और विक्रेता सक्रिय हैं?",
+    "mr": "किती खरेदीदार आणि पुरवठादार सक्रिय आहेत?"
+  },
+  {
+    "id": "q-parties-7",
+    "categoryId": "PARTIES",
+    "en": "Show me the commodities with the most available supplies.",
+    "hi": "सबसे अधिक उपलब्ध आपूर्ति वाली कमोडिटीज दिखाएं।",
+    "mr": "सर्वाधिक उपलब्ध पुरवठा असलेला शेतमाल दाखवा."
+  },
+  {
+    "id": "q-parties-8",
+    "categoryId": "PARTIES",
+    "en": "Give me a summary of today's marketplace activity.",
+    "hi": "मुझे आज की बाजार गतिविधि का सारांश दें।",
+    "mr": "आजच्या बाजारपेठ हालचालींचा सारांश द्या."
+  },
+  {
+    "id": "q-whatsapp-1",
+    "categoryId": "WHATSAPP",
+    "en": "Is WhatsApp configured and connected?",
+    "hi": "क्या व्हाट्सएप कॉन्फ़िगर और कनेक्टेड है?",
+    "mr": "व्हॉट्सॲप कॉन्फिगर आणि कनेक्ट केलेले आहे का?"
+  },
+  {
+    "id": "q-whatsapp-2",
+    "categoryId": "WHATSAPP",
+    "en": "Is WhatsApp enabled or disabled?",
+    "hi": "क्या व्हाट्सएप सक्षम या अक्षम है?",
+    "mr": "व्हॉट्सॲप सक्षम की अक्षम आहे?"
+  },
+  {
+    "id": "q-whatsapp-3",
+    "categoryId": "WHATSAPP",
+    "en": "Test the WhatsApp connection.",
+    "hi": "व्हाट्सएप कनेक्शन का परीक्षण करें।",
+    "mr": "व्हॉट्सॲप कनेक्शन तपासा."
+  },
+  {
+    "id": "q-whatsapp-4",
+    "categoryId": "WHATSAPP",
+    "en": "Show me the WhatsApp configuration status.",
+    "hi": "व्हाट्सएप कॉन्फ़िगरेशन स्थिति दिखाएं।",
+    "mr": "व्हॉट्सॲप कॉन्फिगरेशन स्थिती दाखवा."
+  },
+  {
+    "id": "q-whatsapp-5",
+    "categoryId": "WHATSAPP",
+    "en": "Is the WhatsApp provider currently available?",
+    "hi": "क्या व्हाट्सएप प्रदाता वर्तमान में उपलब्ध है?",
+    "mr": "व्हॉट्सॲप प्रदाता सध्या उपलब्ध आहे का?"
+  },
+  {
+    "id": "q-whatsapp-6",
+    "categoryId": "WHATSAPP",
+    "en": "Why did the WhatsApp connection test fail?",
+    "hi": "व्हाट्सएप कनेक्शन परीक्षण विफल क्यों हुआ?",
+    "mr": "व्हॉट्सॲप कनेक्शन चाचणी का अयशस्वी झाली?"
+  },
+  {
+    "id": "q-whatsapp-7",
+    "categoryId": "WHATSAPP",
+    "en": "Are WhatsApp message delivery records available?",
+    "hi": "क्या व्हाट्सएप संदेश वितरण रिकॉर्ड उपलब्ध हैं?",
+    "mr": "व्हॉट्सॲप संदेश वितरण नोंदी उपलब्ध आहेत का?"
+  }
+]
